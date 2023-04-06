@@ -1,1 +1,22 @@
-<p>productslist works!</p>
+<div class="table-responsive-sm">
+  <table class="table table-dark">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Image</th>
+        <th>Av. Quantity</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let prd of prdList">
+        <td>{{ prd.id }}</td>
+        <td>{{ prd.name }}</td>
+        <td><img [src]="prd.imgURL" /></td>
+        <td>{{ prd.quantity }}</td>
+        <td>{{ prd.price }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
