@@ -1,4 +1,12 @@
-import { Component } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+} from '@angular/core';
+import { retry } from 'rxjs';
+import { Icategory } from 'src/app/models/icategory';
 import { Iproduct } from 'src/app/models/iproduct';
 
 @Component({
@@ -6,9 +14,14 @@ import { Iproduct } from 'src/app/models/iproduct';
   templateUrl: './productslist.component.html',
   styleUrls: ['./productslist.component.scss'],
 })
-export class ProductslistComponent {
+export class ProductslistComponent implements OnChanges {
   prdList: Iproduct[];
   orderTotalPrice: number = 0;
+  orderDate: Date;
+  @Input() sentCatId: number = 0;
+  @Output() totalPriceChanged: EventEmitter<number>;
+  productListOfCategory: Iproduct[] = [];
+
   constructor() {
     this.prdList = [
       {
@@ -60,6 +73,16 @@ export class ProductslistComponent {
         categoryID: 3,
       },
     ];
+
+    this.orderDate = new Date();
+
+    this.productListOfCategory = this.prdList;
+
+    this.totalPriceChanged = new EventEmitter<number>();
+  }
+
+  ngOnChanges() {
+    this.filterproductById();
   }
 
   buy(prdPrice: number, count: any): void {
@@ -67,7 +90,31 @@ export class ProductslistComponent {
     // this.orderTotalPrice = (count as number) * prdPrice;
     // this.orderTotalPrice = parseInt(count) * prdPrice;
 
-    this.orderTotalPrice = +count * prdPrice;
-    console.log(this.orderTotalPrice);
+    this.orderTotalPrice += +count * prdPrice;
+    this.totalPriceChanged.emit(this.orderTotalPrice);
+  }
+
+  // getSelectedCat(value: any) {
+  //   console.log(value);
+  // }
+
+  // changeCat() {
+  //   this.selectedCatId = 1;
+  // }
+
+  private filterproductById() {
+    if (this.sentCatId === 0) {
+      this.productListOfCategory = this.prdList;
+    } else {
+      this.productListOfCategory = this.prdList.filter(
+        (prd) => prd.categoryID == this.sentCatId
+      );
+    }
+
+    console.log(this.productListOfCategory);
+  }
+
+  trackByFn(index: number, prd: Iproduct) {
+    return prd.id;
   }
 }

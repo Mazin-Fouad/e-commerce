@@ -1,8 +1,19 @@
+<!-- <div class="text-info">
+  [To be removed]: For testing 2 way binding
+  <br />
+  {{ selectedCatId }} <br />
+  Order's Date: {{ orderDate | date : "fullDate" }} <br />
+  <button class="btn btn-primary" (click)="changeCat()">
+    Click toc change Selected Category from component
+  </button>
+</div> -->
+<hr />
+
 <div class="table-responsive-sm container-fluid">
-  <table class="table table-dark">
+  <table class="table">
     <thead>
       <tr>
-        <th>ID</th>
+        <th>No.</th>
         <th>Name</th>
         <th>Image</th>
         <th>Av. Quantity</th>
@@ -12,12 +23,49 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let prd of prdList">
+      <!--<tr> *ngFor="let prd of prdList; let i = index; trackBy: trackByFn"
+      [class.d-none]="selectedCatId != prd.categoryID"
+      [style.background-color]="prd.quantity == 0 ? 'yellow' : 'grey'" -->
+
+      <!-- <tr
+        *ngFor="let prd of prdList; let i = index; trackBy: trackByFn"
+        [hidden]="prd.quantity == 0"
+      > -->
+
+      <!-- <ng-container
+        *ngFor="let prd of prdList; let i = index; trackBy: trackByFn"
+      >
+        <tr *ngIf="prd.quantity != 0"> -->
+      <tr
+        *ngFor="
+          let prd of productListOfCategory;
+          let i = index;
+          trackBy: trackByFn
+        "
+        [ngClass]="{
+          'bg-info': prd.quantity == 0,
+          'text-light': prd.quantity == 0
+        }"
+      >
         <!-- Safe Navigation Operator (?) -->
-        <td>{{ prd?.id }}</td>
+        <td>{{ i + 1 }}</td>
         <td>{{ prd.name }}</td>
-        <td><img [src]="prd.imgURL" /></td>
-        <td>{{ prd.quantity }}</td>
+        <!-- <td><img LightBox highlightColor="red" [src]="prd.imgURL" /></td> -->
+        <!-- <td><img LightBox="red" [src]="prd.imgURL" /></td> -->
+        <!-- <td><img [LightBox]="readAsProbertyFromTS" [src]="prd.imgURL" /></td> -->
+        <td><img LightBox="red" defaultColor="gray" [src]="prd.imgURL" /></td>
+        <td>
+          <!-- <div *ngIf="prd.quantity != 0; else outOfStocke">
+            {{ prd.quantity }}
+          </div>
+          <ng-template #outOfStocke>Out of Stock</ng-template> -->
+
+          <ng-container [ngSwitch]="prd.quantity">
+            <div *ngSwitchCase="0">Out of Stock</div>
+            <div *ngSwitchCase="1">Last One</div>
+            <div *ngSwitchDefault>{{ prd.quantity }}</div>
+          </ng-container>
+        </td>
         <td>{{ prd.price }}</td>
         <!-- #itemsCount is a Template Variable  -->
         <td><input #itemsCount type="number" /></td>
@@ -30,8 +78,12 @@
           </button>
         </td>
       </tr>
+      <!-- </ng-container> -->
     </tbody>
   </table>
 
-  <h3>The total Price of your order is {{ orderTotalPrice }} €</h3>
+  <!-- <h3>
+    [To be removed] <br />
+    The total Price of your order is {{ orderTotalPrice }} €
+  </h3> -->
 </div>

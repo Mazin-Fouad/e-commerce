@@ -1,13 +1,23 @@
-import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import {
+  Directive,
+  ElementRef,
+  HostListener,
+  Input,
+  OnChanges,
+} from '@angular/core';
 
 @Directive({
   selector: '[LightBox]',
 })
-export class LightBoxDirective {
+export class LightBoxDirective implements OnChanges {
   @Input('LightBox') highlightColor: string = 'yellow';
   @Input() defaultColor: string = 'royalblue';
 
   constructor(private elemRef: ElementRef) {
+    // this.elemRef.nativeElement.style.border = `2px solid ${this.defaultColor}`;
+  }
+
+  ngOnChanges() {
     this.elemRef.nativeElement.style.border = `2px solid ${this.defaultColor}`;
   }
 
