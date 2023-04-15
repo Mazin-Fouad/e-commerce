@@ -71,7 +71,7 @@
         <td><input #itemsCount type="number" /></td>
         <td>
           <button
-            (click)="buy(prd.price, itemsCount.value)"
+            (click)="buy(prd.price, itemsCount.value, prd.name)"
             class="btn btn-warning"
           >
             Buy

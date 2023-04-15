@@ -29,3 +29,34 @@
 </div>
 <hr />
 <h3>Order Total Price: {{ recievedTotalPrice }}</h3>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">NO.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Count</th>
+      <th scope="col">Total Price</th>
+      <th scope="col">Remove</th>
+    </tr>
+  </thead>
+  <tbody>
+    <ng-container *ngIf="orderArray.length != 0; else noOrder">
+      <tr *ngFor="let order of orderArray; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ order.productName }}</td>
+        <td>{{ order.productPrice }}</td>
+        <td>{{ order.productCount }}</td>
+        <td>{{ order.productPrice * order.productCount }}</td>
+        <td>
+          <button class="btn btn-danger" (click)="removeOrder(i)">
+            Remove
+          </button>
+        </td>
+      </tr>
+    </ng-container>
+  </tbody>
+  <ng-template #noOrder><h1>Cart is Empty</h1></ng-template>
+</table>
+<h1>Your Total Order is: {{ getTotalPrice() | currency : "EUR" }}</h1>

@@ -8,6 +8,7 @@ import {
 import { retry } from 'rxjs';
 import { Icategory } from 'src/app/models/icategory';
 import { Iproduct } from 'src/app/models/iproduct';
+import { CartView } from 'src/app/viewModels/cart-view';
 
 @Component({
   selector: 'app-productslist',
@@ -19,7 +20,8 @@ export class ProductslistComponent implements OnChanges {
   orderTotalPrice: number = 0;
   orderDate: Date;
   @Input() sentCatId: number = 0;
-  @Output() totalPriceChanged: EventEmitter<number>;
+  // @Output() totalPriceChanged: EventEmitter<number>;
+  @Output() totalPriceChanged: EventEmitter<CartView>;
   productListOfCategory: Iproduct[] = [];
 
   constructor() {
@@ -78,20 +80,30 @@ export class ProductslistComponent implements OnChanges {
 
     this.productListOfCategory = this.prdList;
 
-    this.totalPriceChanged = new EventEmitter<number>();
+    this.totalPriceChanged = new EventEmitter<CartView>();
   }
 
   ngOnChanges() {
     this.filterproductById();
   }
 
-  buy(prdPrice: number, count: any): void {
-    // this.orderTotalPrice = Number(count) * prdPrice;
-    // this.orderTotalPrice = (count as number) * prdPrice;
-    // this.orderTotalPrice = parseInt(count) * prdPrice;
+  // buy(prdPrice: number, count: any): void {
+  //   // this.orderTotalPrice = Number(count) * prdPrice;
+  //   // this.orderTotalPrice = (count as number) * prdPrice;
+  //   // this.orderTotalPrice = parseInt(count) * prdPrice;
 
-    this.orderTotalPrice += +count * prdPrice;
-    this.totalPriceChanged.emit(this.orderTotalPrice);
+  //   this.orderTotalPrice += +count * prdPrice;
+  //   this.totalPriceChanged.emit();
+  // }
+
+  buy(prdPrice: number, count: any, productName: string): void {
+    const cartView: CartView = {
+      productName: productName,
+      productCount: +count,
+      productPrice: prdPrice,
+    };
+
+    this.totalPriceChanged.emit(cartView);
   }
 
   // getSelectedCat(value: any) {
